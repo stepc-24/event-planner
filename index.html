@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>XX活动策划 — 定制你的专属精彩时刻</title>
+<style>
+/* ========== 全局样式 ========== */
+:root {
+  --gold: #C9A96E;
+  --gold-light: #e0d5c0;
+  --dark: #1a1a2e;
+  --dark2: #16213e;
+  --text: #333;
+  --text2: #666;
+  --text3: #999;
+  --bg: #f5f5f5;
+  --white: #fff;
+  --radius: 12px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ========== 顶部导航 ========== */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--dark);
+  padding: 0 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-title { color: #fff; font-size: 17px; font-weight: 600; letter-spacing: 2px; }
+.nav-back {
+  color: var(--gold);
+  font-size: 14px;
+  cursor: pointer;
+  display: none;
+  padding: 6px 0;
+}
+.nav-back.show { display: block; }
+
+/* ========== 顶部 Banner ========== */
+.banner {
+  background: linear-gradient(160deg, #1a1a2e, #16213e, #0f3460);
+  padding: 36px 24px 28px;
+  text-align: center;
+}
+.banner-title { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: 4px; margin-bottom: 8px; }
+.banner-subtitle { font-size: 14px; color: rgba(255,255,255,0.65); letter-spacing: 2px; }
+
+/* ========== 分类筛选 ========== */
+.category-bar {
+  background: #fff;
+  padding: 12px 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 48px;
+  z-index: 100;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+}
+.category-bar::-webkit-scrollbar { display: none; }
+.category-list { display: flex; padding: 0 8px; }
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 18px;
+  margin: 0 4px;
+  border-radius: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+.cat-item.active { background: linear-gradient(135deg, #C9A96E, #b8944f); box-shadow: 0 2px 10px rgba(201,169,110,0.3); }
+.cat-icon { font-size: 22px; margin-bottom: 2px; }
+.cat-name { font-size: 13px; color: #666; }
+.cat-item.active .cat-name { color: #fff; font-weight: 600; }
+
+/* ========== 卡片列表 ========== */
+.page-view { display: none; padding: 16px; padding-bottom: 40px; }
+.page-view.active { display: block; }
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .15s;
+}
+.card:active { transform: scale(0.985); }
+
+.card-cover-wrap {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #e0e0e0;
+  overflow: hidden;
+}
+.card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.card-tags {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+}
+.tag {
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  backdrop-filter: blur(6px);
+}
+.play-badge {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.play-badge::after { content: "▶"; color: #fff; font-size: 20px; margin-left: 3px; }
+
+.card-body { padding: 16px 18px 18px; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.card-title { font-size: 18px; font-weight: 700; color: var(--dark); flex:1; margin-right: 12px; }
+.card-price { font-size: 15px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.card-desc {
+  font-size: 13px; color: var(--text3);
+  line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.card-cta { font-size: 13px; color: var(--gold); font-weight: 600; }
+
+/* ========== 详情页 ========== */
+.video-section { width: 100%; background: #000; }
+.video-section video { width: 100%; height: 260px; display: block; }
+
+.gallery-wrap { position: relative; width: 100%; height: 320px; background: #e0e0e0; overflow: hidden; }
+.gallery-track { display: flex; height: 100%; transition: transform 0.4s ease; }
+.gallery-slide { min-width: 100%; height: 100%; }
+.gallery-slide img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-dots {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px;
+}
+.gallery-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.5); transition: all .3s;
+}
+.gallery-dot.active { background: var(--gold); width: 16px; border-radius: 3px; }
+.gallery-counter {
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(0,0,0,0.5); color: #fff; font-size: 11px;
+  padding: 4px 10px; border-radius: 12px; backdrop-filter: blur(6px);
+}
+
+.info-section { background: #fff; padding: 20px 18px; margin-bottom: 12px; }
+.detail-title { font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+.detail-tags { display: flex; gap: 8px; margin-bottom: 14px; }
+.detail-tags .tag { background: rgba(201,169,110,0.12); color: var(--gold); position: static; }
+.detail-desc { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 16px; }
+.price-range-row {
+  display: flex; align-items: center;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(201,169,110,0.06), rgba(201,169,110,0.12));
+  border-radius: 10px; border-left: 4px solid var(--gold);
+}
+.price-label { font-size: 14px; color: #666; margin-right: 8px; }
+.price-value { font-size: 20px; font-weight: 700; color: var(--gold); }
+
+.price-section { background: #fff; padding: 20px 18px; margin-bottom: 12px; }
+.price-section-title { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
+.price-cards { display: flex; flex-direction: column; gap: 14px; }
+
+.pkg-card {
+  padding: 20px 18px;
+  border-radius: 14px;
+  background: #fafafa;
+  border: 2px solid #eee;
+  position: relative;
+  transition: all .2s;
+}
+.pkg-card.recommend {
+  background: linear-gradient(135deg, #fffdf7, #fef9ef);
+  border-color: var(--gold);
+  box-shadow: 0 2px 14px rgba(201,169,110,0.12);
+}
+.pkg-badge {
+  position: absolute; top: -2px; right: 20px;
+  background: linear-gradient(135deg, #C9A96E, #b8944f);
+  color: #fff; font-size: 12px; padding: 5px 16px;
+  border-radius: 0 0 10px 10px; font-weight: 600;
+}
+
+.pkg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.pkg-name { font-size: 16px; font-weight: 700; color: var(--dark); }
+.pkg-price { font-size: 24px; font-weight: 700; color: var(--gold); }
+.pkg-price small { font-size: 14px; }
+.pkg-divider { height: 1px; background: #eee; margin-bottom: 14px; }
+.pkg-card.recommend .pkg-divider { background: rgba(201,169,110,0.2); }
+.pkg-items { display: flex; flex-direction: column; gap: 10px; }
+.pkg-item { display: flex; align-items: center; font-size: 13px; color: #555; }
+.pkg-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--gold); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-right: 10px; flex-shrink: 0;
+}
+
+/* ========== 联系区域 ========== */
+.contact-section { background: #fff; padding: 20px 18px; margin-bottom: 12px; }
+.contact-desc { font-size: 13px; color: #999; line-height: 1.6; }
+
+/* ========== 底部按钮 ========== */
+.bottom-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  display: flex; gap: 12px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
+  z-index: 200;
+}
+.btn-call, .btn-wechat {
+  flex: 1; height: 46px; border-radius: 23px;
+  font-size: 15px; font-weight: 600; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-call { background: var(--dark); color: #fff; }
+.btn-wechat { background: linear-gradient(135deg, #07c160, #06ad56); color: #fff; }
+.btn-call:active, .btn-wechat:active { opacity: 0.85; }
+
+.bottom-spacer { height: 80px; }
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  background: rgba(0,0,0,0.78); color: #fff; padding: 14px 24px;
+  border-radius: 10px; font-size: 14px; z-index: 999;
+  pointer-events: none; opacity: 0; transition: opacity .25s;
+}
+.toast.show { opacity: 1; }
+
+/* ========== 空状态 ========== */
+.empty { text-align: center; padding: 80px 20px; }
+.empty-icon { font-size: 60px; margin-bottom: 12px; }
+.empty-text { font-size: 16px; color: #999; margin-bottom: 6px; }
+.empty-hint { font-size: 13px; color: #ccc; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<div class="nav-bar">
+  <span class="nav-back" id="navBack" onclick="goBack()">← 返回</span>
+  <span class="nav-title" id="navTitle">XX活动策划</span>
+  <span style="width:40px"></span>
+</div>
+
+<!-- 首页视图 -->
+<div class="page-view active" id="homePage">
+  <div class="banner">
+    <div class="banner-title">XX活动策划</div>
+    <div class="banner-subtitle">为每一个重要时刻 · 定制专属精彩</div>
+  </div>
+
+  <div class="category-bar">
+    <div class="category-list" id="catList"></div>
+  </div>
+
+  <div style="padding:16px">
+    <div id="cardContainer"></div>
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-icon">📭</div>
+      <div class="empty-text">该分类暂无内容</div>
+      <div class="empty-hint">敬请期待更多精彩活动</div>
+    </div>
+  </div>
+</div>
+
+<!-- 详情页视图 -->
+<div class="page-view" id="detailPage">
+  <div id="detailContent"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== 数据 ==========
+const categories = [
+  { id:'all', name:'全部', icon:'🎨' },
+  { id:'wedding', name:'婚礼策划', icon:'💒' },
+  { id:'birthday', name:'生日派对', icon:'🎂' },
+  { id:'corporate', name:'企业年会', icon:'🏢' },
+  { id:'party', name:'主题派对', icon:'🎉' },
+  { id:'other', name:'其他活动', icon:'✨' }
+];
+
+const styles = [
+  {
+    id:1, category:'wedding',
+    title:'浪漫海岛婚礼',
+    cover:'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=380&fit=crop',
+    desc:'阳光、沙滩、海浪，在碧海蓝天下许下永恒的誓言，打造独一无二的梦幻海岛婚礼体验。',
+    priceRange:'¥28,888 - ¥68,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'基础套餐', price:'¥28,888', items:['场地布置','基础鲜花装饰','专业摄影跟拍','婚礼主持人','化妆造型1套'] },
+      { name:'豪华套餐', price:'¥48,888', items:['全场定制布置','高级鲜花装饰','双机位摄影+摄像','金牌主持人','化妆造型3套','灯光音响设备','甜品台'] },
+      { name:'尊享定制', price:'¥68,888', items:['全场高端定制','进口鲜花装饰','三机位摄影+航拍','明星主持人','全程跟妆造型','顶级灯光音响','豪华甜品台+香槟塔','婚礼管家全程服务'] }
+    ],
+    tags:['海岛','户外','浪漫'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:2, category:'wedding',
+    title:'经典中式婚礼',
+    cover:'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=380&fit=crop',
+    desc:'凤冠霞帔，十里红妆。传承千年文化底蕴，打造一场大气磅礴的中式传统婚礼。',
+    priceRange:'¥38,888 - ¥88,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'典雅套餐', price:'¥38,888', items:['中式场地布置','传统花轿','汉服妆造2套','专业摄影','传统仪式主持'] },
+      { name:'华贵套餐', price:'¥58,888', items:['豪华中式布置','八抬大轿','汉服妆造4套','双机位摄影+摄像','中式乐队','大红灯笼装饰'] },
+      { name:'皇家定制', price:'¥88,888', items:['宫殿级定制布置','皇家仪仗队','不限套数汉服','三机位+航拍','知名司仪','古筝+编钟乐队','全场红灯笼+绸缎装饰'] }
+    ],
+    tags:['中式','传统','大气'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:3, category:'wedding',
+    title:'森系草坪婚礼',
+    cover:'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=380&fit=crop',
+    desc:'绿野仙踪般的浪漫，在大自然的怀抱中，用鲜花和绿植装点你们的幸福时刻。',
+    priceRange:'¥18,888 - ¥48,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'清新套餐', price:'¥18,888', items:['草坪场地布置','鲜花拱门','基础摄影','户外音响'] },
+      { name:'浪漫套餐', price:'¥28,888', items:['全场鲜花布置','鲜花拱门+路引','专业摄影+摄像','户外乐队'] },
+      { name:'梦幻套餐', price:'¥48,888', items:['全定制森系布置','进口鲜花装饰','双机位+航拍','弦乐四重奏','篝火晚宴'] }
+    ],
+    tags:['森系','户外','清新'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:4, category:'birthday',
+    title:'梦幻公主生日派对',
+    cover:'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&h=380&fit=crop',
+    desc:'每个女孩都有一个公主梦，为她打造一场粉色梦幻的生日派对，留下美好童年回忆。',
+    priceRange:'¥8,888 - ¥25,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1464347601390-25e2842a0bcb?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'欢乐套餐', price:'¥8,888', items:['主题气球布置','公主裙1套','基础摄影','生日蛋糕','游戏互动'] },
+      { name:'豪华套餐', price:'¥15,888', items:['全场主题布置','公主裙2套','专业摄影+摄像','定制蛋糕','魔术表演','甜品台'] },
+      { name:'尊享套餐', price:'¥25,888', items:['全定制梦幻布置','高定公主裙','双机位摄影+快剪','翻糖蛋糕','舞台剧表演','豪华甜品台+伴手礼'] }
+    ],
+    tags:['公主','梦幻','儿童'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:5, category:'birthday',
+    title:'潮流成人礼派对',
+    cover:'https://images.unsplash.com/photo-1496337589254-7e19d01cec44?w=600&h=380&fit=crop',
+    desc:'18岁，人生的新起点。用一场最潮、最炸的派对，宣告你的青春态度！',
+    priceRange:'¥12,888 - ¥38,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1496337589254-7e19d01cec44?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'潮玩套餐', price:'¥12,888', items:['潮流场地布置','DJ打碟','基础摄影','荧光装饰'] },
+      { name:'炸场套餐', price:'¥22,888', items:['全场潮牌布置','知名DJ','专业摄影+快剪','灯光秀','定制鸡尾酒'] },
+      { name:'顶流套餐', price:'¥38,888', items:['全定制潮流空间','明星DJ+MC','三机位+直播','3D灯光秀','定制酒水+美食','红毯签名墙'] }
+    ],
+    tags:['潮流','成人礼','派对'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:6, category:'corporate',
+    title:'年度盛典企业年会',
+    cover:'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=380&fit=crop',
+    desc:'凝聚团队力量，展示企业风采。打造一场高规格、有温度的企业年度盛典。',
+    priceRange:'¥58,888 - ¥188,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1478147427282-58a87a120781?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'标准套餐', price:'¥58,888', items:['酒店宴会厅布置','LED大屏+灯光音响','专业主持人','基础摄影+摄像','节目编排3个'] },
+      { name:'精英套餐', price:'¥98,888', items:['全场定制布置','大型LED屏+灯光矩阵','知名主持人','多机位+直播','节目编排6个','抽奖系统'] },
+      { name:'旗舰套餐', price:'¥188,888', items:['五星酒店全案定制','顶级舞美灯光','明星主持人+嘉宾','全程直播+航拍','节目全案策划','定制抽奖+颁奖系统','开场视频制作'] }
+    ],
+    tags:['年会','企业','盛典'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:7, category:'corporate',
+    title:'新品发布会',
+    cover:'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&h=380&fit=crop',
+    desc:'以最炫目的方式呈现你的产品，让每一个细节都彰显品牌实力。',
+    priceRange:'¥38,888 - ¥128,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'标准套餐', price:'¥38,888', items:['发布会场地布置','LED屏+基础灯光','主持人','基础摄影','茶歇'] },
+      { name:'专业套餐', price:'¥68,888', items:['品牌定制布置','大型LED屏+灯光秀','专业主持人','多机位+直播','媒体邀请','产品展示区'] },
+      { name:'旗舰套餐', price:'¥128,888', items:['全案品牌定制','顶级舞美+3D投影','知名主持人','全程直播+短视频','全媒体推广','沉浸式体验区','VIP晚宴'] }
+    ],
+    tags:['发布会','品牌','科技'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  },
+  {
+    id:8, category:'party',
+    title:'圣诞狂欢主题派对',
+    cover:'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=600&h=380&fit=crop',
+    desc:'红与绿的节日氛围，在圣诞树下交换礼物，享受年末最温暖的狂欢之夜。',
+    priceRange:'¥15,888 - ¥45,888',
+    video:'',
+    poster:'',
+    images:[
+      'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1482517967863-00e15c9b44be?w=800&h=500&fit=crop',
+      'https://images.unsplash.com/photo-1576919228236-a097c32a5cd4?w=800&h=500&fit=crop'
+    ],
+    prices:[
+      { name:'欢乐套餐', price:'¥15,888', items:['圣诞主题布置','圣诞树+装饰','基础餐饮','音乐播放','基础摄影'] },
+      { name:'狂欢套餐', price:'¥28,888', items:['全场圣诞定制','大型圣诞树+灯光','自助晚宴','DJ打碟','专业摄影+快剪','礼物交换环节'] },
+      { name:'奢华套餐', price:'¥45,888', items:['圣诞奇幻空间','定制灯光秀','米其林级晚宴','知名DJ+乐队','全程跟拍+直播','定制伴手礼','圣诞老人互动'] }
+    ],
+    tags:['圣诞','狂欢','节日'],
+    contact:{ phone:'13800138000', wechat:'eventplanner123' }
+  }
+];
+
+// ========== 状态 ==========
+let activeCat = 'all';
+let currentStyle = null;
+let galleryTimer = null;
+let galleryIndex = 0;
+
+// ========== 工具函数 ==========
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function getFiltered() {
+  return activeCat === 'all' ? styles : styles.filter(s => s.category === activeCat);
+}
+
+// ========== 渲染分类栏 ==========
+function renderCats() {
+  const list = document.getElementById('catList');
+  list.innerHTML = categories.map(c => `
+    <div class="cat-item ${c.id === activeCat ? 'active' : ''}" onclick="switchCat('${c.id}')">
+      <span class="cat-icon">${c.icon}</span>
+      <span class="cat-name">${c.name}</span>
+    </div>
+  `).join('');
+}
+
+// ========== 渲染卡片 ==========
+function renderCards() {
+  const data = getFiltered();
+  const container = document.getElementById('cardContainer');
+  const empty = document.getElementById('emptyState');
+
+  if (data.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = data.map(s => `
+    <div class="card" onclick="openDetail(${s.id})">
+      <div class="card-cover-wrap">
+        <img class="card-cover" src="${s.cover}" alt="${s.title}" loading="lazy" onerror="this.style.display='none'">
+        ${s.tags.length ? `<div class="card-tags">${s.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
+        ${s.video ? `<div class="play-badge"></div>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <span class="card-title">${s.title}</span>
+          <span class="card-price">${s.priceRange}</span>
+        </div>
+        <div class="card-desc">${s.desc}</div>
+        <div class="card-cta">查看详情 →</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== 分类切换 ==========
+function switchCat(id) {
+  if (id === activeCat) return;
+  activeCat = id;
+  renderCats();
+  renderCards();
+}
+
+// ========== 页面切换 ==========
+function goBack() {
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('detailPage').classList.remove('active');
+  document.getElementById('navBack').classList.remove('show');
+  document.getElementById('navTitle').textContent = 'XX活动策划';
+  document.querySelector('.nav-bar').style.borderBottom = '';
+  clearInterval(galleryTimer);
+  currentStyle = null;
+}
+
+// ========== 打开详情 ==========
+function openDetail(id) {
+  const s = styles.find(x => x.id === id);
+  if (!s) return;
+  currentStyle = s;
+  galleryIndex = 0;
+
+  document.getElementById('homePage').classList.remove('active');
+  document.getElementById('detailPage').classList.add('active');
+  document.getElementById('navBack').classList.add('show');
+  document.getElementById('navTitle').textContent = s.title;
+  document.querySelector('.nav-bar').style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+
+  const recIdx = 1; // 推荐第二个套餐
+
+  let html = '';
+
+  // 视频
+  if (s.video) {
+    html += `<div class="video-section"><video src="${s.video}" poster="${s.poster}" controls playsinline></video></div>`;
+  }
+
+  // 图片轮播
+  html += `
+  <div class="gallery-wrap">
+    <div class="gallery-track" id="galleryTrack">${s.images.map((img,i) => `
+      <div class="gallery-slide"><img src="${img}" alt="" loading="lazy" onclick="previewImg(${i})"></div>
+    `).join('')}</div>
+    <div class="gallery-dots" id="galleryDots">${s.images.map((_,i) => `
+      <div class="gallery-dot ${i===0?'active':''}"></div>
+    `).join('')}</div>
+    ${s.images.length > 1 ? `<div class="gallery-counter" id="galleryCounter">1 / ${s.images.length}</div>` : ''}
+  </div>`;
+
+  // 详情信息
+  html += `
+  <div class="info-section">
+    <div class="detail-tags">${s.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    <div class="detail-desc">${s.desc}</div>
+    <div class="price-range-row">
+      <span class="price-label">价格区间：</span>
+      <span class="price-value">${s.priceRange}</span>
+    </div>
+  </div>`;
+
+  // 套餐
+  html += `<div class="price-section">
+    <div class="price-section-title">💰 套餐详情</div>
+    <div class="price-cards">${s.prices.map((p,i) => `
+      <div class="pkg-card ${i === recIdx ? 'recommend' : ''}">
+        ${i === recIdx ? '<div class="pkg-badge">推荐</div>' : ''}
+        <div class="pkg-header">
+          <span class="pkg-name">${p.name}</span>
+          <span class="pkg-price"><small>¥</small>${p.price.replace('¥','')}</span>
+        </div>
+        <div class="pkg-divider"></div>
+        <div class="pkg-items">${p.items.map(svc => `
+          <div class="pkg-item"><span class="pkg-check">✓</span>${svc}</div>
+        `).join('')}</div>
+      </div>
+    `).join('')}</div>
+  </div>`;
+
+  // 联系
+  html += `
+  <div class="contact-section">
+    <div class="price-section-title" style="margin-bottom:8px">📞 联系我们</div>
+    <div class="contact-desc">对本次活动风格感兴趣？立即联系我们获取更多详情和专属优惠！</div>
+  </div>`;
+
+  // 底部按钮
+  html += `
+  <div class="bottom-spacer"></div>
+  <div class="bottom-bar">
+    <button class="btn-call" onclick="doCall()">📞 拨打电话</button>
+    <button class="btn-wechat" onclick="doWechat()">💬 复制微信</button>
+  </div>`;
+
+  document.getElementById('detailContent').innerHTML = html;
+
+  // 启动轮播
+  startGallery(s);
+}
+
+// ========== 图片轮播 ==========
+function startGallery(s) {
+  clearInterval(galleryTimer);
+  if (s.images.length <= 1) return;
+
+  galleryTimer = setInterval(() => {
+    galleryIndex = (galleryIndex + 1) % s.images.length;
+    updateGallery(s);
+  }, 3500);
+}
+
+function updateGallery(s) {
+  const track = document.getElementById('galleryTrack');
+  const dots = document.getElementById('galleryDots');
+  const counter = document.getElementById('galleryCounter');
+  if (track) track.style.transform = `translateX(-${galleryIndex * 100}%)`;
+  if (dots) {
+    dots.querySelectorAll('.gallery-dot').forEach((d,i) => d.classList.toggle('active', i === galleryIndex));
+  }
+  if (counter) counter.textContent = `${galleryIndex + 1} / ${s.images.length}`;
+}
+
+// 触摸滑动
+let touchStartX = 0;
+document.addEventListener('touchstart', e => {
+  if (!currentStyle) return;
+  const wrap = document.querySelector('.gallery-wrap');
+  if (wrap && wrap.contains(e.target)) touchStartX = e.touches[0].clientX;
+}, {passive:true});
+
+document.addEventListener('touchend', e => {
+  if (!currentStyle || !touchStartX) return;
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) galleryIndex = Math.min(galleryIndex + 1, currentStyle.images.length - 1);
+    else galleryIndex = Math.max(galleryIndex - 1, 0);
+    updateGallery(currentStyle);
+  }
+  touchStartX = 0;
+});
+
+function previewImg(idx) {
+  if (!currentStyle) return;
+  // 简单的大图预览：在新窗口打开
+  window.open(currentStyle.images[idx], '_blank');
+}
+
+// ========== 联系操作 ==========
+function doCall() {
+  if (!currentStyle) return;
+  const phone = currentStyle.contact.phone;
+  if (confirm(`确认拨打：${phone}？`)) {
+    window.location.href = `tel:${phone}`;
+  }
+}
+
+function doWechat() {
+  if (!currentStyle) return;
+  const wechat = currentStyle.contact.wechat;
+  navigator.clipboard.writeText(wechat).then(() => {
+    alert(`微信号「${wechat}」已复制到剪贴板，请前往微信添加好友。`);
+  }).catch(() => {
+    // 降级方案
+    const ta = document.createElement('textarea');
+    ta.value = wechat;
+    ta.style.position = 'fixed'; ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert(`微信号「${wechat}」已复制到剪贴板，请前往微信添加好友。`);
+  });
+}
+
+// ========== 初始化 ==========
+renderCats();
+renderCards();
+</script>
+</body>
+</html>
