@@ -73,24 +73,9 @@ body {
 
 /* ========== 顶部 Banner ========== */
 .banner {
-  background: linear-gradient(160deg, #1a1a2e, #16213e, #0f3460);
-  padding: 36px 24px 28px;
-  text-align: center;
+  background: url('1.jpg') center/cover no-repeat;
+  height: 260px;
   animation: fadeInDown var(--dur-slow) var(--ease-out) both;
-  position: relative;
-  overflow: hidden;
-}
-/* 微妙的光点装饰 */
-.banner::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 60%, rgba(201,169,110,0.06) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(201,169,110,0.04) 0%, transparent 50%);
-  animation: float 8s ease-in-out infinite;
 }
 .banner-title {
   font-size: 28px; font-weight: 700; color: #fff; letter-spacing: 4px; margin-bottom: 8px;
@@ -667,11 +652,7 @@ body {
 
 <!-- 首页视图 -->
 <div class="page-view active" id="homePage">
-  <div class="banner" id="banner">
-    <canvas class="banner-canvas" id="particleCanvas"></canvas>
-    <div class="banner-title">XX活动策划</div>
-    <div class="banner-subtitle">为每一个重要时刻 · 定制专属精彩</div>
-  </div>
+      <div class="banner" id="banner"></div>
 
   <div class="category-bar">
     <div class="category-list" id="catList"></div>
