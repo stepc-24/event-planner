@@ -1,0 +1,187 @@
+{
+  "categories": [
+    { "id": "wedding", "name": "婚礼策划", "icon": "💒" },
+    { "id": "birthday", "name": "生日派对", "icon": "🎂" },
+    { "id": "corporate", "name": "企业年会", "icon": "🏢" },
+    { "id": "party", "name": "主题派对", "icon": "🎉" },
+    { "id": "other", "name": "其他活动", "icon": "✨" }
+  ],
+  "styles": [
+    {
+      "id": 1,
+      "category": "wedding",
+      "title": "浪漫海岛婚礼",
+      "cover": "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=380&fit=crop",
+      "desc": "阳光、沙滩、海浪，在碧海蓝天下许下永恒的誓言，打造独一无二的梦幻海岛婚礼体验。",
+      "priceRange": "¥28,888 - ¥68,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "基础套餐", "price": "¥28,888", "items": ["场地布置", "基础鲜花装饰", "专业摄影跟拍", "婚礼主持人", "化妆造型1套"] },
+        { "name": "豪华套餐", "price": "¥48,888", "items": ["全场定制布置", "高级鲜花装饰", "双机位摄影+摄像", "金牌主持人", "化妆造型3套", "灯光音响设备", "甜品台"] },
+        { "name": "尊享定制", "price": "¥68,888", "items": ["全场高端定制", "进口鲜花装饰", "三机位摄影+航拍", "明星主持人", "全程跟妆造型", "顶级灯光音响", "豪华甜品台+香槟塔", "婚礼管家全程服务"] }
+      ],
+      "tags": ["海岛", "户外", "浪漫"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 2,
+      "category": "wedding",
+      "title": "经典中式婚礼",
+      "cover": "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=600&h=380&fit=crop",
+      "desc": "凤冠霞帔，十里红妆。传承千年文化底蕴，打造一场大气磅礴的中式传统婚礼。",
+      "priceRange": "¥38,888 - ¥88,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "典雅套餐", "price": "¥38,888", "items": ["中式场地布置", "传统花轿", "汉服妆造2套", "专业摄影", "传统仪式主持"] },
+        { "name": "华贵套餐", "price": "¥58,888", "items": ["豪华中式布置", "八抬大轿", "汉服妆造4套", "双机位摄影+摄像", "中式乐队", "大红灯笼装饰"] },
+        { "name": "皇家定制", "price": "¥88,888", "items": ["宫殿级定制布置", "皇家仪仗队", "不限套数汉服", "三机位+航拍", "知名司仪", "古筝+编钟乐队", "全场红灯笼+绸缎装饰"] }
+      ],
+      "tags": ["中式", "传统", "大气"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 3,
+      "category": "wedding",
+      "title": "森系草坪婚礼",
+      "cover": "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=380&fit=crop",
+      "desc": "绿野仙踪般的浪漫，在大自然的怀抱中，用鲜花和绿植装点你们的幸福时刻。",
+      "priceRange": "¥18,888 - ¥48,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1509927083803-4bd519298ac4?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "清新套餐", "price": "¥18,888", "items": ["草坪场地布置", "鲜花拱门", "基础摄影", "户外音响"] },
+        { "name": "浪漫套餐", "price": "¥28,888", "items": ["全场鲜花布置", "鲜花拱门+路引", "专业摄影+摄像", "户外乐队"] },
+        { "name": "梦幻套餐", "price": "¥48,888", "items": ["全定制森系布置", "进口鲜花装饰", "双机位+航拍", "弦乐四重奏", "篝火晚宴"] }
+      ],
+      "tags": ["森系", "户外", "清新"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 4,
+      "category": "birthday",
+      "title": "梦幻公主生日派对",
+      "cover": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600&h=380&fit=crop",
+      "desc": "每个女孩都有一个公主梦，为她打造一场粉色梦幻的生日派对，留下美好童年回忆。",
+      "priceRange": "¥8,888 - ¥25,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1464347601390-25e2842a0bcb?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "欢乐套餐", "price": "¥8,888", "items": ["主题气球布置", "公主裙1套", "基础摄影", "生日蛋糕", "游戏互动"] },
+        { "name": "豪华套餐", "price": "¥15,888", "items": ["全场主题布置", "公主裙2套", "专业摄影+摄像", "定制蛋糕", "魔术表演", "甜品台"] },
+        { "name": "尊享套餐", "price": "¥25,888", "items": ["全定制梦幻布置", "高定公主裙", "双机位摄影+快剪", "翻糖蛋糕", "舞台剧表演", "豪华甜品台+伴手礼"] }
+      ],
+      "tags": ["公主", "梦幻", "儿童"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 5,
+      "category": "birthday",
+      "title": "潮流成人礼派对",
+      "cover": "https://images.unsplash.com/photo-1496337589254-7e19d01cec44?w=600&h=380&fit=crop",
+      "desc": "18岁，人生的新起点。用一场最潮、最炸的派对，宣告你的青春态度！",
+      "priceRange": "¥12,888 - ¥38,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1496337589254-7e19d01cec44?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "潮玩套餐", "price": "¥12,888", "items": ["潮流场地布置", "DJ打碟", "基础摄影", "荧光装饰"] },
+        { "name": "炸场套餐", "price": "¥22,888", "items": ["全场潮牌布置", "知名DJ", "专业摄影+快剪", "灯光秀", "定制鸡尾酒"] },
+        { "name": "顶流套餐", "price": "¥38,888", "items": ["全定制潮流空间", "明星DJ+MC", "三机位+直播", "3D灯光秀", "定制酒水+美食", "红毯签名墙"] }
+      ],
+      "tags": ["潮流", "成人礼", "派对"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 6,
+      "category": "corporate",
+      "title": "年度盛典企业年会",
+      "cover": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=380&fit=crop",
+      "desc": "凝聚团队力量，展示企业风采。打造一场高规格、有温度的企业年度盛典。",
+      "priceRange": "¥58,888 - ¥188,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1478147427282-58a87a120781?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "标准套餐", "price": "¥58,888", "items": ["酒店宴会厅布置", "LED大屏+灯光音响", "专业主持人", "基础摄影+摄像", "节目编排3个"] },
+        { "name": "精英套餐", "price": "¥98,888", "items": ["全场定制布置", "大型LED屏+灯光矩阵", "知名主持人", "多机位+直播", "节目编排6个", "抽奖系统"] },
+        { "name": "旗舰套餐", "price": "¥188,888", "items": ["五星酒店全案定制", "顶级舞美灯光", "明星主持人+嘉宾", "全程直播+航拍", "节目全案策划", "定制抽奖+颁奖系统", "开场视频制作"] }
+      ],
+      "tags": ["年会", "企业", "盛典"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 7,
+      "category": "corporate",
+      "title": "新品发布会",
+      "cover": "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&h=380&fit=crop",
+      "desc": "以最炫目的方式呈现你的产品，让每一个细节都彰显品牌实力。",
+      "priceRange": "¥38,888 - ¥128,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "标准套餐", "price": "¥38,888", "items": ["发布会场地布置", "LED屏+基础灯光", "主持人", "基础摄影", "茶歇"] },
+        { "name": "专业套餐", "price": "¥68,888", "items": ["品牌定制布置", "大型LED屏+灯光秀", "专业主持人", "多机位+直播", "媒体邀请", "产品展示区"] },
+        { "name": "旗舰套餐", "price": "¥128,888", "items": ["全案品牌定制", "顶级舞美+3D投影", "知名主持人", "全程直播+短视频", "全媒体推广", "沉浸式体验区", "VIP晚宴"] }
+      ],
+      "tags": ["发布会", "品牌", "科技"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    },
+    {
+      "id": 8,
+      "category": "party",
+      "title": "圣诞狂欢主题派对",
+      "cover": "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=600&h=380&fit=crop",
+      "desc": "红与绿的节日氛围，在圣诞树下交换礼物，享受年末最温暖的狂欢之夜。",
+      "priceRange": "¥15,888 - ¥45,888",
+      "video": "",
+      "poster": "",
+      "images": [
+        "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1482517967863-00e15c9b44be?w=800&h=500&fit=crop",
+        "https://images.unsplash.com/photo-1576919228236-a097c32a5cd4?w=800&h=500&fit=crop"
+      ],
+      "prices": [
+        { "name": "欢乐套餐", "price": "¥15,888", "items": ["圣诞主题布置", "圣诞树+装饰", "基础餐饮", "音乐播放", "基础摄影"] },
+        { "name": "狂欢套餐", "price": "¥28,888", "items": ["全场圣诞定制", "大型圣诞树+灯光", "自助晚宴", "DJ打碟", "专业摄影+快剪", "礼物交换环节"] },
+        { "name": "奢华套餐", "price": "¥45,888", "items": ["圣诞奇幻空间", "定制灯光秀", "米其林级晚宴", "知名DJ+乐队", "全程跟拍+直播", "定制伴手礼", "圣诞老人互动"] }
+      ],
+      "tags": ["圣诞", "狂欢", "节日"],
+      "contact": { "phone": "13800138000", "wechat": "eventplanner123" }
+    }
+  ]
+}

@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>管理后台 · XX活动策划</title>
+<style>
+:root {
+  --gold: #C9A96E;
+  --gold-light: #e0d5c0;
+  --dark: #1a1a2e;
+  --text: #333;
+  --text2: #666;
+  --bg: #f5f5f5;
+  --white: #fff;
+  --danger: #d9534f;
+  --green: #07c160;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+.hidden { display: none !important; }
+
+/* 通用 */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--dark); color: #fff;
+  padding: 0 16px; height: 52px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar .title { font-size: 17px; font-weight: 600; letter-spacing: 1px; }
+.topbar .actions { display: flex; gap: 8px; }
+.btn {
+  border: none; border-radius: 8px; padding: 8px 14px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  background: #eee; color: #333;
+  transition: transform .1s ease, opacity .1s ease;
+}
+.btn:active { transform: scale(0.96); }
+.btn.primary { background: var(--gold); color: #fff; }
+.btn.danger { background: var(--danger); color: #fff; }
+.btn.ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+.btn.green { background: var(--green); color: #fff; }
+
+.screen { padding: 16px; }
+
+/* 登录 / 令牌 */
+.center-card {
+  background: #fff; border-radius: var(--radius);
+  padding: 28px 22px; margin-top: 40px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.center-card h1 { font-size: 20px; color: var(--dark); margin-bottom: 6px; }
+.center-card .sub { font-size: 13px; color: #999; margin-bottom: 18px; line-height: 1.6; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; font-weight: 600; }
+.field input, .field textarea, .field select {
+  width: 100%; border: 1px solid #ddd; border-radius: 8px;
+  padding: 10px 12px; font-size: 15px; font-family: inherit;
+  background: #fafafa; color: var(--text);
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none; border-color: var(--gold); background: #fff;
+}
+.steps { font-size: 13px; color: #666; line-height: 1.9; margin: 12px 0; }
+.steps a { color: var(--gold); }
+
+/* 分区标题 */
+.section-title {
+  font-size: 16px; font-weight: 700; color: var(--dark);
+  margin: 22px 0 10px; display: flex; align-items: center; justify-content: space-between;
+}
+.section-title .btn { font-size: 12px; padding: 6px 12px; }
+
+.card-box {
+  background: #fff; border-radius: var(--radius);
+  padding: 6px 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+}
+.hint { padding: 18px 4px; color: #999; font-size: 13px; text-align: center; }
+
+/* 分类行 */
+.cat-admin-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+}
+.cat-admin-row:last-child { border-bottom: none; }
+.cat-admin-icon { font-size: 22px; }
+.cat-admin-name { font-weight: 600; flex: 1; }
+.cat-admin-id { font-size: 11px; color: #bbb; }
+.row-actions { display: flex; gap: 6px; }
+.row-actions .btn { padding: 5px 10px; font-size: 12px; }
+
+/* 案例行 */
+.case-admin-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+}
+.case-admin-row:last-child { border-bottom: none; }
+.case-admin-row img {
+  width: 56px; height: 42px; object-fit: cover; border-radius: 6px;
+  background: #eee; flex-shrink: 0;
+}
+.case-admin-info { flex: 1; min-width: 0; }
+.case-admin-title { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.case-admin-meta { font-size: 12px; color: #999; margin-top: 2px; }
+
+/* 编辑表单 */
+.form-section {
+  background: #fff; border-radius: var(--radius); padding: 16px;
+  margin-bottom: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+}
+.form-section .f-title { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+.editor-btns {
+  position: sticky; bottom: 0; background: #fff;
+  padding: 12px 16px; margin: 0 -16px;
+  display: flex; gap: 10px;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+.editor-btns .btn { flex: 1; height: 44px; font-size: 15px; }
+
+/* 图片行 */
+.img-row {
+  display: flex; gap: 10px; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #f5f5f5;
+}
+.img-row:last-child { border-bottom: none; }
+.img-preview {
+  width: 64px; height: 48px; object-fit: cover; border-radius: 6px;
+  background: #eee; flex-shrink: 0;
+}
+.img-controls { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.img-controls input[type=text] {
+  width: 100%; border: 1px solid #ddd; border-radius: 6px;
+  padding: 7px 10px; font-size: 13px; background: #fafafa;
+}
+.file-btn {
+  display: inline-block; font-size: 12px; color: var(--gold); font-weight: 600;
+  cursor: pointer; width: fit-content;
+}
+.file-btn input { display: none; }
+.icon-btn {
+  border: none; background: #f2f2f2; color: #999;
+  width: 26px; height: 26px; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+  font-size: 13px; line-height: 1;
+}
+.icon-btn.danger { background: #fdecea; color: var(--danger); }
+.add-btn {
+  width: 100%; border: 1px dashed #ccc; background: transparent;
+  color: #999; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  margin-top: 6px;
+}
+
+/* 套餐块 */
+.pkg-block {
+  border: 1px solid #eee; border-radius: 10px; padding: 12px; margin-bottom: 10px;
+  background: #fafafa;
+}
+.pkg-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.pkg-block input, .pkg-block textarea {
+  width: 100%; border: 1px solid #ddd; border-radius: 6px;
+  padding: 8px 10px; font-size: 14px; background: #fff; margin-bottom: 8px;
+  font-family: inherit;
+}
+.pkg-block textarea { min-height: 80px; resize: vertical; }
+.pkg-block input:last-child { margin-bottom: 0; }
+
+/* 覆盖层 / toast */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+}
+.overlay .box {
+  background: #fff; border-radius: 12px; padding: 22px 28px;
+  text-align: center; font-size: 14px; color: #333; min-width: 180px;
+}
+.spinner {
+  width: 26px; height: 26px; margin: 0 auto 12px;
+  border: 3px solid #eee; border-top-color: var(--gold); border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  background: rgba(0,0,0,0.8); color: #fff; padding: 12px 20px;
+  border-radius: 8px; font-size: 14px; z-index: 1000; max-width: 80%;
+  text-align: center; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- 登录 -->
+<div id="loginView" class="screen hidden">
+  <div class="center-card">
+    <h1>管理后台</h1>
+    <div class="sub">XX活动策划 · 内容管理</div>
+    <div class="field">
+      <label>请输入管理密码</label>
+      <input type="password" id="pwInput" placeholder="密码" onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <button class="btn primary" style="width:100%;height:44px" onclick="login()">进入后台</button>
+  </div>
+</div>
+
+<!-- 令牌设置 -->
+<div id="tokenView" class="screen hidden">
+  <div class="center-card">
+    <h1>首次设置</h1>
+    <div class="sub">需要连接你的 GitHub 仓库，才能「保存并发布」。只需设置一次。</div>
+    <div class="steps">
+      1. 打开 <a href="https://github.com/settings/personal-access-tokens" target="_blank">github.com/settings/personal-access-tokens</a><br>
+      2. 点 <b>Generate new token</b>（Fine-grained）<br>
+      3. Repository access 选 <b>Only select repositories</b>，勾选 <b>event-planner</b><br>
+      4. Permissions → <b>Contents</b> 设为 <b>Read and write</b><br>
+      5. 点 Generate，复制生成的那串令牌，粘贴到下面
+    </div>
+    <div class="field">
+      <label>GitHub 令牌</label>
+      <input type="password" id="tokenInput" placeholder="粘贴令牌">
+    </div>
+    <button class="btn primary" style="width:100%;height:44px" onclick="saveToken()">保存并进入</button>
+  </div>
+</div>
+
+<!-- 主界面 -->
+<div id="mainView" class="screen hidden">
+  <div class="topbar">
+    <span class="title">内容管理</span>
+    <span class="actions">
+      <button class="btn ghost" onclick="resetToken()">换令牌</button>
+      <button class="btn ghost" onclick="logout()">退出</button>
+    </span>
+  </div>
+
+  <div class="section-title">
+    <span>📁 分类</span>
+    <button class="btn primary" onclick="addCategory()">＋ 新增分类</button>
+  </div>
+  <div class="card-box" id="catAdminList"></div>
+
+  <div class="section-title">
+    <span>🎨 案例</span>
+    <button class="btn green" onclick="openEditor(null)">＋ 新增案例</button>
+  </div>
+  <div class="card-box" id="caseAdminList"></div>
+</div>
+
+<!-- 案例编辑 -->
+<div id="editorView" class="screen hidden">
+  <div class="topbar">
+    <span class="title" id="editorTitle">编辑案例</span>
+    <span class="actions">
+      <button class="btn ghost" onclick="showMain()">取消</button>
+    </span>
+  </div>
+
+  <div class="form-section">
+    <div class="f-title">基本信息</div>
+    <div class="field">
+      <label>标题 *</label>
+      <input type="text" id="caseTitle" placeholder="如：浪漫海岛婚礼">
+    </div>
+    <div class="field">
+      <label>分类 *</label>
+      <select id="caseCategory"></select>
+    </div>
+    <div class="field">
+      <label>描述 *</label>
+      <textarea id="caseDesc" rows="3" placeholder="简单介绍这个活动"></textarea>
+    </div>
+    <div class="field">
+      <label>价格区间</label>
+      <input type="text" id="casePriceRange" placeholder="如：¥28,888 - ¥68,888">
+    </div>
+    <div class="field">
+      <label>标签（用逗号分隔）</label>
+      <input type="text" id="caseTags" placeholder="如：海岛，户外，浪漫">
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="f-title">封面图 *</div>
+    <div id="coverBox"></div>
+  </div>
+
+  <div class="form-section">
+    <div class="f-title">轮播图（可多张，至少 1 张）*</div>
+    <div id="galleryBox"></div>
+    <button class="add-btn" onclick="addGalleryRow()">＋ 添加一张图片</button>
+  </div>
+
+  <div class="form-section">
+    <div class="f-title">套餐（可任意增减）</div>
+    <div id="pkgBlocks"></div>
+    <button class="add-btn" onclick="addPkg()">＋ 添加一个套餐</button>
+  </div>
+
+  <div class="form-section">
+    <div class="f-title">联系方式</div>
+    <div class="field">
+      <label>电话 *</label>
+      <input type="text" id="casePhone" placeholder="如：13800138000">
+    </div>
+    <div class="field">
+      <label>微信号 *</label>
+      <input type="text" id="caseWechat" placeholder="如：eventplanner123">
+    </div>
+  </div>
+
+  <div class="editor-btns">
+    <button class="btn danger" onclick="showMain()">取消</button>
+    <button class="btn primary" onclick="saveCase()">保存并发布</button>
+  </div>
+</div>
+
+<!-- 覆盖层 -->
+<div id="overlay" class="overlay hidden">
+  <div class="box"><div class="spinner"></div><span id="overlayText">处理中…</span></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ========== 配置 ==========
+const OWNER = 'stepc-24';
+const REPO = 'event-planner';
+const BRANCH = 'master';
+const DATA_PATH = 'data.json';
+const ADMIN_PASSWORD = 'admin2026';
+const TOKEN_KEY = 'ep_admin_token';
+const AUTH_KEY = 'ep_admin_ok';
+const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
+
+// ========== 状态 ==========
+let categories = [];
+let styles = [];
+let editingId = null;
+
+// ========== 基础工具 ==========
+function $(id) { return document.getElementById(id); }
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function showOverlay(msg) { $('overlayText').textContent = msg || '处理中…'; $('overlay').classList.remove('hidden'); }
+function hideOverlay() { $('overlay').classList.add('hidden'); }
+function showScreen(id) {
+  ['loginView','tokenView','mainView','editorView'].forEach(x => $(x).classList.add('hidden'));
+  $(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
+function setToken(t) { localStorage.setItem(TOKEN_KEY, t.trim()); }
+
+// ========== GitHub API ==========
+function ghHeaders() {
+  return {
+    'Authorization': 'Bearer ' + getToken(),
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json'
+  };
+}
+async function ghGet(path) {
+  const r = await fetch(`${API}/${path}?ref=${BRANCH}`, { headers: ghHeaders() });
+  if (r.status === 404) return null;
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || ('HTTP ' + r.status)); }
+  return r.json();
+}
+async function ghPut(path, contentB64, message, sha) {
+  const body = { message, content: contentB64, branch: BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${API}/${path}`, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.message || ('HTTP ' + r.status)); }
+  return r.json();
+}
+function utf8ToB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64ToUtf8(b64) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+async function loadRepoData() {
+  const item = await ghGet(DATA_PATH);
+  if (!item) return { categories: [], styles: [] };
+  try { return JSON.parse(b64ToUtf8(item.content)); }
+  catch (e) { throw new Error('data.json 解析失败'); }
+}
+async function publishData() {
+  const item = await ghGet(DATA_PATH);
+  const sha = item ? item.sha : undefined;
+  const b64 = utf8ToB64(JSON.stringify({ categories, styles }, null, 2));
+  await ghPut(DATA_PATH, b64, '管理后台更新内容', sha);
+}
+
+// ========== 图片处理 ==========
+function compressImage(file, maxDim, quality) {
+  maxDim = maxDim || 1280; quality = quality || 0.8;
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => reject(new Error('图片读取失败'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('文件读取失败'));
+    reader.readAsDataURL(file);
+  });
+}
+async function uploadImage(dataUrl, filename) {
+  const b64 = dataUrl.split(',')[1];
+  const path = 'images/' + filename;
+  await ghPut(path, b64, '上传图片 ' + filename);
+  return path;
+}
+async function resolveImageRow(row) {
+  const file = row.querySelector('.img-file');
+  const url = row.querySelector('.img-url');
+  const existing = row.dataset.existing || '';
+  if (file && file.files && file.files[0]) {
+    const dataUrl = await compressImage(file.files[0]);
+    const name = Date.now() + '-' + Math.floor(Math.random() * 10000) + '.jpg';
+    return await uploadImage(dataUrl, name);
+  }
+  if (url && url.value.trim()) return url.value.trim();
+  return existing;
+}
+
+// ========== 图片行 / 套餐块 ==========
+function makeImageRow(value) {
+  const row = document.createElement('div');
+  row.className = 'img-row';
+  row.dataset.existing = value || '';
+  const isHttp = value && value.indexOf('http') === 0;
+  row.innerHTML = `
+    <img class="img-preview" src="${value || ''}" ${value ? '' : 'style="opacity:0"'}>
+    <div class="img-controls">
+      <label class="file-btn">📷 选择图片<input type="file" class="img-file" accept="image/*"></label>
+      <input type="text" class="img-url" placeholder="或粘贴图片链接" value="${isHttp ? value : ''}">
+    </div>
+    <button type="button" class="icon-btn danger" title="删除">✕</button>
+  `;
+  const file = row.querySelector('.img-file');
+  const url = row.querySelector('.img-url');
+  const preview = row.querySelector('.img-preview');
+  const setPreview = src => { if (src) { preview.src = src; preview.style.opacity = ''; } else { preview.style.opacity = '0'; } };
+  file.addEventListener('change', () => {
+    if (file.files[0]) { const fr = new FileReader(); fr.onload = e => setPreview(e.target.result); fr.readAsDataURL(file.files[0]); }
+  });
+  url.addEventListener('input', () => setPreview(url.value.trim()));
+  row.querySelector('.icon-btn').addEventListener('click', () => row.remove());
+  return row;
+}
+function makePkgBlock(p) {
+  const b = document.createElement('div');
+  b.className = 'pkg-block';
+  b.innerHTML = `
+    <div class="pkg-head">
+      <input type="text" class="pkg-name" placeholder="套餐名称" value="${(p && p.name) || ''}">
+      <button type="button" class="icon-btn danger" title="删除此套餐">✕</button>
+    </div>
+    <input type="text" class="pkg-price" placeholder="价格，如 ¥28,888" value="${(p && p.price) || ''}">
+    <textarea class="pkg-items" placeholder="服务项，每行一个">${(p && p.items) ? p.items.join('\n') : ''}</textarea>
+  `;
+  b.querySelector('.icon-btn').addEventListener('click', () => b.remove());
+  return b;
+}
+function addGalleryRow(value) {
+  $('galleryBox').appendChild(makeImageRow(value || ''));
+}
+function addPkg() {
+  $('pkgBlocks').appendChild(makePkgBlock(null));
+}
+
+// ========== 登录 / 令牌 ==========
+function login() {
+  if ($('pwInput').value === ADMIN_PASSWORD) {
+    sessionStorage.setItem(AUTH_KEY, '1');
+    $('pwInput').value = '';
+    if (!getToken()) showScreen('tokenView'); else showMain();
+  } else {
+    toast('密码错误');
+  }
+}
+function saveToken() {
+  const t = $('tokenInput').value.trim();
+  if (!t) { toast('请粘贴令牌'); return; }
+  setToken(t);
+  showMain();
+}
+function logout() {
+  sessionStorage.removeItem(AUTH_KEY);
+  showScreen('loginView');
+}
+function resetToken() {
+  localStorage.removeItem(TOKEN_KEY);
+  $('tokenInput').value = '';
+  showScreen('tokenView');
+}
+
+// ========== 主界面 ==========
+async function showMain() {
+  editingId = null;
+  showScreen('mainView');
+  showOverlay('正在加载数据…');
+  try {
+    const data = await loadRepoData();
+    categories = data.categories || [];
+    styles = data.styles || [];
+    renderCategoryList();
+    renderCaseList();
+    hideOverlay();
+  } catch (e) {
+    hideOverlay();
+    toast('加载失败：' + e.message);
+  }
+}
+function catName(id) { const c = categories.find(x => x.id === id); return c ? c.name : id; }
+function renderCategoryList() {
+  $('catAdminList').innerHTML = categories.map(c => `
+    <div class="cat-admin-row">
+      <span class="cat-admin-icon">${c.icon || '📁'}</span>
+      <span class="cat-admin-name">${c.name}</span>
+      <span class="cat-admin-id">${c.id}</span>
+      <div class="row-actions">
+        <button class="btn" onclick="renameCategory('${c.id}')">改名</button>
+        <button class="btn danger" onclick="deleteCategory('${c.id}')">删除</button>
+      </div>
+    </div>
+  `).join('') || '<div class="hint">还没有分类，点右上角新增</div>';
+}
+function renderCaseList() {
+  $('caseAdminList').innerHTML = styles.map(s => `
+    <div class="case-admin-row">
+      <img src="${s.cover || ''}" onerror="this.style.opacity=0">
+      <div class="case-admin-info">
+        <div class="case-admin-title">${s.title || '(无标题)'}</div>
+        <div class="case-admin-meta">${catName(s.category)}</div>
+      </div>
+      <div class="row-actions">
+        <button class="btn" onclick="openEditor(${s.id})">编辑</button>
+        <button class="btn danger" onclick="deleteCase(${s.id})">删除</button>
+      </div>
+    </div>
+  `).join('') || '<div class="hint">还没有案例，点右上角新增</div>';
+}
+
+// ========== 分类操作 ==========
+async function publishWithConfirm(desc) {
+  showOverlay('正在发布…');
+  try {
+    await publishData();
+    hideOverlay();
+    toast('已保存（' + desc + '），约 1 分钟生效');
+  } catch (e) {
+    hideOverlay();
+    toast('保存失败：' + e.message);
+  }
+}
+function addCategory() {
+  const name = prompt('分类名称：');
+  if (name === null) return;
+  if (!name.trim()) { toast('名称不能为空'); return; }
+  let icon = prompt('分类图标（emoji，可留空）：', '📁');
+  if (icon === null) return;
+  const id = 'c' + Date.now().toString(36);
+  categories.push({ id, name: name.trim(), icon: icon.trim() || '📁' });
+  renderCategoryList();
+  publishWithConfirm('新增分类「' + name.trim() + '」');
+}
+function renameCategory(id) {
+  const c = categories.find(x => x.id === id);
+  if (!c) return;
+  const name = prompt('新名称：', c.name);
+  if (name === null) return;
+  if (!name.trim()) { toast('名称不能为空'); return; }
+  const icon = prompt('新图标（emoji，可留空）：', c.icon || '📁');
+  if (icon === null) return;
+  c.name = name.trim();
+  c.icon = icon.trim() || c.icon;
+  renderCategoryList();
+  publishWithConfirm('修改分类「' + c.name + '」');
+}
+function deleteCategory(id) {
+  const c = categories.find(x => x.id === id);
+  if (!c) return;
+  const used = styles.filter(s => s.category === id).length;
+  if (used > 0) { toast('该分类下还有 ' + used + ' 个案例，先移动或删除它们'); return; }
+  if (!confirm('确定删除分类「' + c.name + '」？')) return;
+  categories = categories.filter(x => x.id !== id);
+  renderCategoryList();
+  publishWithConfirm('删除分类「' + c.name + '」');
+}
+
+// ========== 案例操作 ==========
+function openEditor(id) {
+  editingId = id;
+  const s = id != null ? styles.find(x => x.id === id) : null;
+
+  $('editorTitle').textContent = id != null ? '编辑案例' : '新增案例';
+  $('caseTitle').value = s ? s.title : '';
+  $('caseDesc').value = s ? s.desc : '';
+  $('casePriceRange').value = s ? s.priceRange : '';
+  $('caseTags').value = s ? (s.tags || []).join('，') : '';
+  $('casePhone').value = s ? s.contact.phone : '';
+  $('caseWechat').value = s ? s.contact.wechat : '';
+
+  const sel = $('caseCategory');
+  sel.innerHTML = categories.map(c => `<option value="${c.id}">${c.icon || ''} ${c.name}</option>`).join('');
+  sel.value = s ? s.category : (categories[0] ? categories[0].id : '');
+
+  $('coverBox').innerHTML = '';
+  $('coverBox').appendChild(makeImageRow(s ? s.cover : ''));
+
+  $('galleryBox').innerHTML = '';
+  const imgs = (s && s.images && s.images.length) ? s.images : [''];
+  imgs.forEach(v => $('galleryBox').appendChild(makeImageRow(v)));
+
+  $('pkgBlocks').innerHTML = '';
+  const pkgs = (s && s.prices && s.prices.length) ? s.prices : [];
+  pkgs.forEach(p => $('pkgBlocks').appendChild(makePkgBlock(p)));
+  if (pkgs.length === 0) addPkg();
+
+  showScreen('editorView');
+}
+
+async function saveCase() {
+  const title = $('caseTitle').value.trim();
+  if (!title) { toast('请填写标题'); return; }
+  const desc = $('caseDesc').value.trim();
+  if (!desc) { toast('请填写描述'); return; }
+  const phone = $('casePhone').value.trim();
+  const wechat = $('caseWechat').value.trim();
+  if (!phone || !wechat) { toast('请填写电话和微信号'); return; }
+
+  showOverlay('正在保存并发布…');
+  try {
+    const cover = await resolveImageRow($('coverBox').querySelector('.img-row'));
+    const rows = [...$('galleryBox').querySelectorAll('.img-row')];
+    const images = [];
+    for (const r of rows) { const v = await resolveImageRow(r); if (v) images.push(v); }
+    if (!cover) { hideOverlay(); toast('请提供封面图'); return; }
+    if (images.length === 0) { hideOverlay(); toast('请至少提供一张轮播图'); return; }
+
+    const prices = [...$('pkgBlocks').querySelectorAll('.pkg-block')].map(b => ({
+      name: b.querySelector('.pkg-name').value.trim(),
+      price: b.querySelector('.pkg-price').value.trim(),
+      items: b.querySelector('.pkg-items').value.split('\n').map(x => x.trim()).filter(Boolean)
+    })).filter(p => p.name || p.price);
+
+    const tags = $('caseTags').value.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+
+    const caseObj = {
+      id: editingId != null ? editingId : (styles.reduce((m, s) => Math.max(m, s.id || 0), 0) + 1),
+      category: $('caseCategory').value,
+      title,
+      cover,
+      desc,
+      priceRange: $('casePriceRange').value.trim(),
+      video: '',
+      poster: '',
+      images,
+      prices,
+      tags,
+      contact: { phone, wechat }
+    };
+
+    if (editingId != null) {
+      const i = styles.findIndex(x => x.id === editingId);
+      if (i >= 0) styles[i] = caseObj; else styles.push(caseObj);
+    } else {
+      styles.push(caseObj);
+    }
+
+    await publishData();
+    hideOverlay();
+    toast('已保存，约 1 分钟生效');
+    showMain();
+  } catch (e) {
+    hideOverlay();
+    toast('保存失败：' + e.message);
+  }
+}
+function deleteCase(id) {
+  const s = styles.find(x => x.id === id);
+  if (!s) return;
+  if (!confirm('确定删除案例「' + s.title + '」？')) return;
+  styles = styles.filter(x => x.id !== id);
+  renderCaseList();
+  publishWithConfirm('删除案例「' + s.title + '」');
+}
+
+// ========== 初始化 ==========
+function init() {
+  if (sessionStorage.getItem(AUTH_KEY) !== '1') showScreen('loginView');
+  else if (!getToken()) showScreen('tokenView');
+  else showMain();
+}
+init();
+</script>
+</body>
+</html>
