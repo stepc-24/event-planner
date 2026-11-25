@@ -116,6 +116,7 @@ body {
 .cat-item:active { transform: scale(0.94); }
 .cat-item.active { background: linear-gradient(135deg, #C9A96E, #b8944f); box-shadow: 0 4px 14px rgba(201,169,110,0.35); }
 .cat-icon { font-size: 22px; margin-bottom: 2px; }
+.cat-icon-img { width: 22px; height: 22px; object-fit: contain; margin-bottom: 2px; }
 .cat-name { font-size: 13px; color: #666; }
 .cat-item.active .cat-name { color: #fff; font-weight: 600; }
 
@@ -720,13 +721,19 @@ function getFiltered() {
   return activeCat === 'all' ? styles : styles.filter(s => s.category === activeCat);
 }
 
+// 判断图标是图片（路径/URL）还是表情文字
+function isImageIcon(icon) {
+  if (!icon) return false;
+  return /^(https?:)?\/\//.test(icon) || /^images\//.test(icon) || /\.(png|jpe?g|gif|svg|webp)(\?.*)?$/i.test(icon);
+}
+
 // ========== 渲染分类栏 ==========
 function renderCats() {
   const list = document.getElementById('catList');
   const cats = [{ id:'all', name:'全部', icon:'🎨' }, ...categories];
   list.innerHTML = cats.map((c, i) => `
     <div class="cat-item ${c.id === activeCat ? 'active' : ''}" onclick="switchCat('${c.id}')" style="opacity:0; animation: fadeInUp var(--dur-normal) var(--ease-out) both; animation-delay: ${40 + i * 50}ms">
-      <span class="cat-icon">${c.icon}</span>
+      ${isImageIcon(c.icon) ? `<img class="cat-icon-img" src="${c.icon}" alt="">` : `<span class="cat-icon">${c.icon}</span>`}
       <span class="cat-name">${c.name}</span>
     </div>
   `).join('');

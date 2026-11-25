@@ -98,6 +98,7 @@ body {
 }
 .cat-admin-row:last-child { border-bottom: none; }
 .cat-admin-icon { font-size: 22px; }
+.cat-admin-icon-img { width: 22px; height: 22px; object-fit: contain; }
 .cat-admin-name { font-weight: 600; flex: 1; }
 .cat-admin-id { font-size: 11px; color: #bbb; }
 .row-actions { display: flex; gap: 6px; }
@@ -200,6 +201,17 @@ body {
   transition: opacity .2s ease;
 }
 .toast.show { opacity: 1; }
+
+/* 分类编辑弹窗 */
+.modal-card {
+  background: #fff; border-radius: 12px; padding: 20px;
+  width: calc(100% - 48px); max-width: 420px;
+}
+.modal-card h3 { font-size: 17px; color: var(--dark); margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+.modal-actions .btn { flex: 1; height: 42px; }
+.cat-icon-preview { width: 44px; height: 44px; object-fit: contain; background: #f5f5f5; border-radius: 8px; margin-bottom: 8px; }
+.cat-img-upload { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 </style>
 </head>
 <body>
@@ -328,6 +340,32 @@ body {
   </div>
 </div>
 
+<!-- 分类编辑弹窗 -->
+<div id="catModal" class="overlay hidden">
+  <div class="modal-card">
+    <h3 id="catModalTitle">新增分类</h3>
+    <div class="field">
+      <label>分类名称</label>
+      <input type="text" id="catNameInput" placeholder="如：婚礼策划">
+    </div>
+    <div class="field">
+      <label>图标（二选一：填表情，或上传小图片）</label>
+      <input type="text" id="catEmojiInput" placeholder="表情符号，如 💒">
+    </div>
+    <div class="field">
+      <label>或上传小图片</label>
+      <div class="cat-img-upload">
+        <img id="catIconPreview" class="cat-icon-preview" style="opacity:0">
+        <label class="file-btn">📷 选择图片<input type="file" id="catImgFile" accept="image/*"></label>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeCatModal()">取消</button>
+      <button class="btn primary" onclick="saveCatModal()">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- 覆盖层 -->
 <div id="overlay" class="overlay hidden">
   <div class="box"><div class="spinner"></div><span id="overlayText">处理中…</span></div>
@@ -350,6 +388,7 @@ const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents`;
 let categories = [];
 let styles = [];
 let editingId = null;
+let editingCatId = null;
 
 // ========== 基础工具 ==========
 function $(id) { return document.getElementById(id); }
@@ -369,6 +408,10 @@ function showScreen(id) {
 }
 function getToken() { return localStorage.getItem(TOKEN_KEY) || ''; }
 function setToken(t) { localStorage.setItem(TOKEN_KEY, t.trim()); }
+function isImageIcon(icon) {
+  if (!icon) return false;
+  return /^(https?:)?\/\//.test(icon) || /^images\//.test(icon) || /\.(png|jpe?g|gif|svg|webp)(\?.*)?$/i.test(icon);
+}
 
 // ========== GitHub API ==========
 function ghHeaders() {
@@ -419,7 +462,7 @@ async function publishData() {
 
 // ========== 图片处理 ==========
 function compressImage(file, maxDim, quality) {
-  maxDim = maxDim || 1280; quality = quality || 0.8;
+  maxDim = maxDim || 1280; quality = quality || 0.8; type = type || 'image/jpeg';
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = e => {
@@ -431,7 +474,7 @@ function compressImage(file, maxDim, quality) {
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        resolve(canvas.toDataURL('image/jpeg', quality));
+        resolve(canvas.toDataURL(type, quality));
       };
       img.onerror = () => reject(new Error('图片读取失败'));
       img.src = e.target.result;
@@ -552,7 +595,7 @@ function catName(id) { const c = categories.find(x => x.id === id); return c ? c
 function renderCategoryList() {
   $('catAdminList').innerHTML = categories.map(c => `
     <div class="cat-admin-row">
-      <span class="cat-admin-icon">${c.icon || '📁'}</span>
+      ${isImageIcon(c.icon) ? `<img class="cat-admin-icon-img" src="${c.icon}" alt="">` : `<span class="cat-admin-icon">${c.icon || '📁'}</span>`}
       <span class="cat-admin-name">${c.name}</span>
       <span class="cat-admin-id">${c.id}</span>
       <div class="row-actions">
@@ -590,30 +633,51 @@ async function publishWithConfirm(desc) {
     toast('保存失败：' + e.message);
   }
 }
-function addCategory() {
-  const name = prompt('分类名称：');
-  if (name === null) return;
-  if (!name.trim()) { toast('名称不能为空'); return; }
-  let icon = prompt('分类图标（emoji，可留空）：', '📁');
-  if (icon === null) return;
-  const id = 'c' + Date.now().toString(36);
-  categories.push({ id, name: name.trim(), icon: icon.trim() || '📁' });
-  renderCategoryList();
-  publishWithConfirm('新增分类「' + name.trim() + '」');
+function openCatModal(id) {
+  editingCatId = id;
+  const c = id != null ? categories.find(x => x.id === id) : null;
+  $('catModalTitle').textContent = id != null ? '编辑分类' : '新增分类';
+  $('catNameInput').value = c ? c.name : '';
+  $('catEmojiInput').value = (c && !isImageIcon(c.icon)) ? c.icon : '';
+  const prev = $('catIconPreview');
+  if (c && isImageIcon(c.icon)) { prev.src = c.icon; prev.style.opacity = ''; }
+  else { prev.style.opacity = '0'; prev.removeAttribute('src'); }
+  $('catImgFile').value = '';
+  $('catModal').classList.remove('hidden');
 }
-function renameCategory(id) {
-  const c = categories.find(x => x.id === id);
-  if (!c) return;
-  const name = prompt('新名称：', c.name);
-  if (name === null) return;
-  if (!name.trim()) { toast('名称不能为空'); return; }
-  const icon = prompt('新图标（emoji，可留空）：', c.icon || '📁');
-  if (icon === null) return;
-  c.name = name.trim();
-  c.icon = icon.trim() || c.icon;
-  renderCategoryList();
-  publishWithConfirm('修改分类「' + c.name + '」');
+function closeCatModal() { $('catModal').classList.add('hidden'); }
+async function saveCatModal() {
+  const name = $('catNameInput').value.trim();
+  if (!name) { toast('请填写分类名称'); return; }
+  const existing = editingCatId != null ? categories.find(x => x.id === editingCatId) : null;
+  showOverlay('保存中…');
+  try {
+    let icon = $('catEmojiInput').value.trim();
+    const file = $('catImgFile').files[0];
+    if (file) {
+      const dataUrl = await compressImage(file, 256, null, 'image/png');
+      icon = await uploadImage(dataUrl, Date.now() + '-icon-' + Math.floor(Math.random() * 10000) + '.png');
+    } else if (!icon && existing) {
+      icon = existing.icon || '';
+    }
+    if (!icon) icon = '📁';
+    if (existing) {
+      existing.name = name; existing.icon = icon;
+    } else {
+      categories.push({ id: 'c' + Date.now().toString(36), name: name, icon: icon });
+    }
+    closeCatModal();
+    renderCategoryList();
+    await publishData();
+    hideOverlay();
+    toast('已保存，约 1 分钟生效');
+  } catch (e) {
+    hideOverlay();
+    toast('保存失败：' + e.message);
+  }
 }
+function addCategory() { openCatModal(null); }
+function renameCategory(id) { openCatModal(id); }
 function deleteCategory(id) {
   const c = categories.find(x => x.id === id);
   if (!c) return;
@@ -725,6 +789,13 @@ function deleteCase(id) {
 
 // ========== 初始化 ==========
 function init() {
+  $('catImgFile').addEventListener('change', function() {
+    if (this.files[0]) {
+      const fr = new FileReader();
+      fr.onload = e => { $('catIconPreview').src = e.target.result; $('catIconPreview').style.opacity = ''; };
+      fr.readAsDataURL(this.files[0]);
+    }
+  });
   if (sessionStorage.getItem(AUTH_KEY) !== '1') showScreen('loginView');
   else if (!getToken()) showScreen('tokenView');
   else showMain();
