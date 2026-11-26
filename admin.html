@@ -611,7 +611,7 @@ function catName(id) { const c = categories.find(x => x.id === id); return c ? c
 function renderCategoryList() {
   $('catAdminList').innerHTML = categories.map(c => `
     <div class="cat-admin-row">
-      ${isImageIcon(c.icon) ? `<img class="cat-admin-icon-img" src="${c.icon}" alt="">` : `<span class="cat-admin-icon">${c.icon || '📁'}</span>`}
+      ${c.icon ? (isImageIcon(c.icon) ? `<img class="cat-admin-icon-img" src="${c.icon}" alt="">` : `<span class="cat-admin-icon">${c.icon}</span>`) : ''}
       <span class="cat-admin-name">${c.name}</span>
       <span class="cat-admin-id">${c.id}</span>
       <div class="row-actions">
@@ -676,7 +676,6 @@ async function saveCatModal() {
     } else if (!icon && existing) {
       icon = existing.icon || '';
     }
-    if (!icon) icon = '📁';
     if (existing) {
       existing.name = name; existing.icon = icon;
     } else {
