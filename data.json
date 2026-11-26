@@ -2,8 +2,8 @@
   "categories": [
     {
       "id": "wedding",
-      "name": "婚礼策划",
-      "icon": ""
+      "name": "求婚策划",
+      "icon": "📁"
     },
     {
       "id": "birthday",
@@ -29,73 +29,14 @@
       "id": "cmww4c16j",
       "name": "求婚策划",
       "icon": ""
+    },
+    {
+      "id": "cmwxbfbf6",
+      "name": "生日派对",
+      "icon": "📁"
     }
   ],
   "styles": [
-    {
-      "id": 1,
-      "category": "wedding",
-      "title": "浪漫海岛婚礼",
-      "cover": "images/1795667621305-7982.jpg",
-      "desc": "阳光、沙滩、海浪，在碧海蓝天下许下永恒的誓言，打造独一无二的梦幻海岛婚礼体验。",
-      "priceRange": "¥28,888 - ¥68,888",
-      "video": "",
-      "poster": "",
-      "images": [
-        "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=500&fit=crop",
-        "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=500&fit=crop",
-        "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=500&fit=crop"
-      ],
-      "prices": [
-        {
-          "name": "基础套餐",
-          "price": "¥28,888",
-          "items": [
-            "场地布置",
-            "基础鲜花装饰",
-            "专业摄影跟拍",
-            "婚礼主持人",
-            "化妆造型1套"
-          ]
-        },
-        {
-          "name": "豪华套餐",
-          "price": "¥48,888",
-          "items": [
-            "全场定制布置",
-            "高级鲜花装饰",
-            "双机位摄影+摄像",
-            "金牌主持人",
-            "化妆造型3套",
-            "灯光音响设备",
-            "甜品台"
-          ]
-        },
-        {
-          "name": "尊享定制",
-          "price": "¥68,888",
-          "items": [
-            "全场高端定制",
-            "进口鲜花装饰",
-            "三机位摄影+航拍",
-            "明星主持人",
-            "全程跟妆造型",
-            "顶级灯光音响",
-            "豪华甜品台+香槟塔",
-            "婚礼管家全程服务"
-          ]
-        }
-      ],
-      "tags": [
-        "海岛",
-        "户外",
-        "浪漫"
-      ],
-      "contact": {
-        "phone": "13800138000",
-        "wechat": "eventplanner123"
-      }
-    },
     {
       "id": 2,
       "category": "wedding",
