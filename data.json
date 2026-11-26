@@ -22,8 +22,18 @@
     },
     {
       "id": "other",
+      "name": "宝宝宴",
+      "icon": "📁"
+    },
+    {
+      "id": "cmwxbk98j",
       "name": "其他活动",
-      "icon": ""
+      "icon": "📁"
+    },
+    {
+      "id": "cmwxbln6b",
+      "name": "企业年会",
+      "icon": "📁"
     }
   ],
   "styles": [
