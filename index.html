@@ -685,7 +685,7 @@ let styles = [];
 // ========== 加载数据 ==========
 async function loadData() {
   try {
-    const res = await fetch('data.json?t=' + Date.now());
+    const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     categories = json.categories || [];
