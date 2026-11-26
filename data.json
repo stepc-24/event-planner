@@ -3,37 +3,37 @@
     {
       "id": "wedding",
       "name": "婚礼策划",
-      "icon": "💒"
+      "icon": ""
     },
     {
       "id": "birthday",
       "name": "生日派对",
-      "icon": "🎂"
+      "icon": ""
     },
     {
       "id": "corporate",
       "name": "企业年会",
-      "icon": "🏢"
+      "icon": ""
     },
     {
       "id": "party",
       "name": "主题派对",
-      "icon": "🎉"
+      "icon": ""
     },
     {
       "id": "other",
       "name": "其他活动",
-      "icon": "✨"
+      "icon": ""
     },
     {
       "id": "cmww4c16j",
       "name": "求婚策划",
-      "icon": "💍"
+      "icon": ""
     },
     {
       "id": "cmwweqrgi",
       "name": "求婚",
-      "icon": "💐"
+      "icon": ""
     }
   ],
   "styles": [

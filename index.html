@@ -730,10 +730,10 @@ function isImageIcon(icon) {
 // ========== 渲染分类栏 ==========
 function renderCats() {
   const list = document.getElementById('catList');
-  const cats = [{ id:'all', name:'全部', icon:'🎨' }, ...categories];
+  const cats = [{ id:'all', name:'全部', icon:'' }, ...categories];
   list.innerHTML = cats.map((c, i) => `
     <div class="cat-item ${c.id === activeCat ? 'active' : ''}" onclick="switchCat('${c.id}')" style="opacity:0; animation: fadeInUp var(--dur-normal) var(--ease-out) both; animation-delay: ${40 + i * 50}ms">
-      ${isImageIcon(c.icon) ? `<img class="cat-icon-img" src="${c.icon}" alt="">` : `<span class="cat-icon">${c.icon}</span>`}
+      ${c.icon ? (isImageIcon(c.icon) ? `<img class="cat-icon-img" src="${c.icon}" alt="">` : `<span class="cat-icon">${c.icon}</span>`) : ''}
       <span class="cat-name">${c.name}</span>
     </div>
   `).join('');
