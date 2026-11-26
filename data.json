@@ -12,13 +12,13 @@
     },
     {
       "id": "corporate",
-      "name": "订婚宴",
+      "name": "纪念日",
       "icon": "📁"
     },
     {
       "id": "party",
-      "name": "主题派对",
-      "icon": ""
+      "name": "订婚宴",
+      "icon": "📁"
     },
     {
       "id": "other",
